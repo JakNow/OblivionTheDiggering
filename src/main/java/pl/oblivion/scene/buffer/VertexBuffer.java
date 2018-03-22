@@ -10,6 +10,7 @@ public class VertexBuffer {
 
     private final int id;
     private final Type type;
+
     private VertexBuffer(int id, Type type) {
         this.id = id;
         this.type = type;

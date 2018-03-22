@@ -12,15 +12,11 @@ import java.util.List;
 public abstract class GameObject implements Cloneable, Saveable, Collidable {
     private static final Logger logger = Logger.getLogger(GameObject.class.getName());
     private final Class classType;
-
+    public Transform transform;
+    public List<GameObject> children = new ArrayList<>();
     protected String name;
-    protected Transform transform;
-    protected Transform worldTransform;
-
     private GameObject parent;
-    private List<GameObject> children = new ArrayList<>();
 
-    private boolean requiresUpdates = true;
 
     protected GameObject(String name, Class classType) {
         this.classType = classType;
@@ -36,35 +32,31 @@ public abstract class GameObject implements Cloneable, Saveable, Collidable {
         this.name = name;
     }
 
-    private GameObject getParent() {
+    public void addChild(GameObject gameObject) {
+        if (children == null) {
+            children = new LinkedList<>();
+        }
+        children.add(gameObject);
+        gameObject.setParent(this);
+        gameObject.transform.transform(this.transform);
+    }
+
+    public void detachChild(GameObject gameObject) {
+        if (gameObject.getParent() == this) {
+            children.remove(gameObject);
+            gameObject.transform.transform(this.transform.negate());
+            gameObject.setParent(null);
+
+        }
+    }
+
+    public GameObject getParent() {
         return parent;
     }
 
     public void setParent(GameObject parent) {
         this.parent = parent;
     }
-
-    public void addChild(GameObject gameObject) {
-        if (children == null) {
-            children = new LinkedList<>();
-        }
-        children.add(gameObject);
-        if (this.transform!=null && gameObject.transform != null) {
-            gameObject.transform.updateToParent(this);
-        }
-    }
-
-    public int detachChild(GameObject gameObject) {
-        if (gameObject.getParent() == this) {
-            int index = children.lastIndexOf(gameObject);
-            if (index != -1) {
-                children.remove(index);
-            }
-            return index;
-        }
-        return -1;
-    }
-
 
     public Class getClassType() {
         return classType;
@@ -74,11 +66,14 @@ public abstract class GameObject implements Cloneable, Saveable, Collidable {
         return children;
     }
 
-    public Transform getTransform(){
-        return transform;
-    }
+    public abstract void update(float delta);
 
-    public Transform getWorldTransform(){
-        return worldTransform;
+    public void updateTree(float delta) {
+        if (this.getParent() != null)
+            this.transform.transform(this.getParent().transform);
+        update(delta);
+        for (GameObject child : children) {
+            child.updateTree(delta);
+        }
     }
 }

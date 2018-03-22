@@ -1,6 +1,6 @@
 package pl.oblivion.scene;
 
-import org.joml.Vector3f;
+import org.joml.Quaternionf;
 
 /**
  * @author jakubnowakowski
@@ -8,12 +8,9 @@ import org.joml.Vector3f;
  */
 public interface Moveable {
 
-    public void rotate(float dx, float dy, float dz, float delta);
-
-    public void rotate(Vector3f dp, float delta);
+    public void rotate(Quaternionf rotation, float delta);
 
     public void translate(float dx, float dy, float dz, float delta);
 
-    public void translate(Vector3f dp, float delta);
 
 }

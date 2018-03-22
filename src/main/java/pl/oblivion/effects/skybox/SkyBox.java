@@ -7,4 +7,9 @@ public class SkyBox extends GameObject {
     protected SkyBox(String name) {
         super(name, SkyBox.class);
     }
+
+    @Override
+    public void update(float delta) {
+
+    }
 }

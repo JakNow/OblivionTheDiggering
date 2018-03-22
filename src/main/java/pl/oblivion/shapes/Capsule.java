@@ -1,25 +1,21 @@
 package pl.oblivion.shapes;
 
 import pl.oblivion.assets.AssetLoader;
-import pl.oblivion.material.Material;
+import pl.oblivion.assets.ShapeCache;
 import pl.oblivion.math.Transform;
-import pl.oblivion.scene.Mesh;
 import pl.oblivion.scene.Model;
 
-public class Capsule extends Model {
+public abstract class Capsule extends Model {
 
-    private static final Mesh mesh = AssetLoader.loadMesh("primitives/capsule.obj");
+    private float height;
+    private float radius;
 
-    public Capsule() {
-        super("Capsule", mesh, AssetLoader.loadMaterial(AssetLoader.DEFAULT_MATERIAL));
+    public Capsule(String name, float height, float radius, Transform transform) {
+        super(name, transform, ShapeCache.getInstance().getCapsuleShape(name, height, radius), AssetLoader
+                .loadMaterial
+                        (AssetLoader
+                                .DEFAULT_MATERIAL));
+        this.height = height;
+        this.radius = radius;
     }
-
-    public Capsule(Transform transform) {
-        super("Capsule", transform, mesh, AssetLoader.loadMaterial(AssetLoader.DEFAULT_MATERIAL));
-    }
-
-    public Capsule(Transform transform, Material material) {
-        super("Capsule", transform, mesh, material);
-    }
-
 }

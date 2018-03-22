@@ -10,7 +10,6 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Objects;
 
-import static java.lang.Math.round;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.stb.STBImage.*;
@@ -39,9 +38,9 @@ public class Texture {
 
     private static int createTexture(String imagePath) {
         ByteBuffer image;
-         final int width;
-         final int height;
-         final int composition;
+        final int width;
+        final int height;
+        final int composition;
 
         ByteBuffer imageBuffer = null;
         try {
@@ -50,18 +49,18 @@ public class Texture {
             logger.error(new RuntimeException());
         }
 
-        try(MemoryStack stack = stackPush()){
+        try (MemoryStack stack = stackPush()) {
             IntBuffer w = stack.mallocInt(1);
             IntBuffer h = stack.mallocInt(1);
             IntBuffer comp = stack.mallocInt(1);
 
-            if(!stbi_info_from_memory(Objects.requireNonNull(imageBuffer),w,h,comp)){
-                logger.error("Failed to read image information: "+stbi_failure_reason()+"\n",new RuntimeException());
+            if (!stbi_info_from_memory(Objects.requireNonNull(imageBuffer), w, h, comp)) {
+                logger.error("Failed to read image information: " + stbi_failure_reason() + "\n", new RuntimeException());
             }
 
-            image = stbi_load_from_memory(imageBuffer,w,h,comp,0);
-            if(image == null){
-                logger.error("Failed to load image: "+stbi_failure_reason()+"\n",new RuntimeException());
+            image = stbi_load_from_memory(imageBuffer, w, h, comp, 0);
+            if (image == null) {
+                logger.error("Failed to load image: " + stbi_failure_reason() + "\n", new RuntimeException());
             }
 
             width = w.get(0);
@@ -88,40 +87,39 @@ public class Texture {
         int input_w = width;
         int input_h = height;
         int mipmapLevel = 0;
-        while(1 < input_w || 1 < input_h){
-            int output_w = Math.max(1,input_w>>1);
-            int output_h = Math.max(1,input_h>>1);
+        while (1 < input_w || 1 < input_h) {
+            int output_w = Math.max(1, input_w >> 1);
+            int output_h = Math.max(1, input_h >> 1);
 
-            ByteBuffer output_pixels = memAlloc(output_w*output_h*composition);
+            ByteBuffer output_pixels = memAlloc(output_w * output_h * composition);
             stbir_resize_uint8_generic(
-                    Objects.requireNonNull(input_pixel),input_w,input_h,input_w*composition,
-                    output_pixels,output_w,output_h,output_w*composition,
-                    composition,composition == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, STBIR_FLAG_ALPHA_PREMULTIPLIED,
+                    Objects.requireNonNull(input_pixel), input_w, input_h, input_w * composition,
+                    output_pixels, output_w, output_h, output_w * composition,
+                    composition, composition == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, STBIR_FLAG_ALPHA_PREMULTIPLIED,
                     STBIR_EDGE_CLAMP,
-                    STBIR_FILTER_MITCHELL,STBIR_COLORSPACE_SRGB
+                    STBIR_FILTER_MITCHELL, STBIR_COLORSPACE_SRGB
             );
 
-            if(mipmapLevel == 0){
+            if (mipmapLevel == 0) {
                 stbi_image_free(Objects.requireNonNull(image));
-            } else{
+            } else {
                 memFree(input_pixel);
             }
 
-            glTexImage2D(GL_TEXTURE_2D,++mipmapLevel,format,output_w,output_h,0,format,GL_UNSIGNED_BYTE,output_pixels);
+            glTexImage2D(GL_TEXTURE_2D, ++mipmapLevel, format, output_w, output_h, 0, format, GL_UNSIGNED_BYTE, output_pixels);
 
             input_pixel = output_pixels;
             input_w = output_w;
             input_h = output_h;
         }
 
-        if(mipmapLevel == 0){
+        if (mipmapLevel == 0) {
             stbi_image_free(Objects.requireNonNull(image));
-        }else{
+        } else {
             memFree(input_pixel);
         }
 
         return texID;
-
 
 
     }
@@ -139,7 +137,6 @@ public class Texture {
     public String toString() {
         return "ID=" + id + ", name=" + name;
     }
-
 
 
 }

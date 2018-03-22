@@ -9,4 +9,9 @@ public class Bloom extends GameObject {
     protected Bloom() {
         super("Bloom", Bloom.class);
     }
+
+    @Override
+    public void update(float delta) {
+
+    }
 }

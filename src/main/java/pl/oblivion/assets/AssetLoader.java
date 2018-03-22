@@ -40,7 +40,7 @@ public class AssetLoader {
     }
 
     public static Texture loadTexture(String name, String path) {
-        return textureCache.getTexture(name,TEXTURES_PATH+path);
+        return textureCache.getTexture(name, TEXTURES_PATH + path);
     }
 
     static Model importModel(String modelName) {

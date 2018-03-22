@@ -55,4 +55,5 @@ public abstract class Light extends GameObject {
     public float getIntensity() {
         return intensity;
     }
+
 }
