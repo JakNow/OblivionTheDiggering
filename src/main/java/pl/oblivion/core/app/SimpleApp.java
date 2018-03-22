@@ -1,9 +1,13 @@
 package pl.oblivion.core.app;
 
 import org.apache.log4j.Logger;
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import pl.oblivion.core.utils.Config;
 import pl.oblivion.engine.camera.Camera;
 import pl.oblivion.engine.render.Renderer;
+import pl.oblivion.math.Transform;
 import pl.oblivion.scene.Scene;
 
 import java.util.Properties;
@@ -21,12 +25,16 @@ public abstract class SimpleApp {
     private final int ups = Integer.parseInt(prop.getProperty("window.display.ups"));
     private final int fps = Integer.parseInt(prop.getProperty("window.display.fps"));
 
+    private static float interval;
     protected SimpleApp() {
         window = new Window();
         timer = new Timer();
-        camera = new Camera(window);
+        camera = new Camera("3d camera",new Vector3f(0,0,0),new Quaternionf(new AxisAngle4f((float)Math.toRadians
+                (0),0,1,0)),
+                window);
         renderer = new Renderer(window, camera);
-        rootScene = new Scene("rootNode");
+        rootScene = new Scene("rootNode", new Transform());
+
 
     }
 
@@ -34,7 +42,7 @@ public abstract class SimpleApp {
         init();
         float elapsedTime;
         float accumulator = 0f;
-        float interval = 1f / ups;
+        interval = 1f / ups;
         float seconds = 0f;
         int upsTick = 0, fpsTick = 0;
 
@@ -45,9 +53,10 @@ public abstract class SimpleApp {
 
             while (accumulator >= interval) {
                 logicUpdate(interval);
+
                 accumulator -= interval;
                 upsTick++;
-            }
+                }
             renderer.render();
             fpsTick++;
             if (!window.isvSync()) {
@@ -90,6 +99,9 @@ public abstract class SimpleApp {
         renderer.cleanUp();
     }
 
+    public static float getInterval(){
+        return interval;
+    }
     private class Timer {
         private final Logger logger = Logger.getLogger(Timer.class);
         private double lastLoopTime;

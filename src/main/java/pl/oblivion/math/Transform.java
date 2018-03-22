@@ -1,11 +1,9 @@
 package pl.oblivion.math;
 
-import org.joml.Math;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import pl.oblivion.scene.GameObject;
-
-import java.util.List;
+import org.joml.Vector4f;
 
 /**
  * @author jakubnowakowski
@@ -14,19 +12,47 @@ import java.util.List;
 public class Transform {
 
     public Vector3f translation;
-    public Quaternion rotation;
+    public Quaternionf rotation;
     public Vector3f scale;
+
+    private final Matrix4f transformationMatrix = new Matrix4f();
+    private Quaternionf tempRotation;
+    private Vector3f tempScale;
 
     public Transform() {
         this.translation = new Vector3f(0.0f);
-        this.rotation = new Quaternion(0.0f, 0.0f, 0.0f);
+        this.rotation = new Quaternionf();
         this.scale = new Vector3f(1.0f);
+        this.tempRotation = new Quaternionf(this.rotation);
+        this.tempScale = new Vector3f(this.scale);
+
     }
 
-    public Transform(Vector3f translation, Quaternion rotation, Vector3f scale) {
+    public Transform(Vector3f translation, Quaternionf rotation, Vector3f scale) {
         this.translation = translation != null ? translation : new Vector3f();
-        this.rotation = rotation != null ? rotation : new Quaternion();
-        this.scale = scale != null ? scale : new Vector3f();
+        this.rotation = rotation != null ? rotation : new Quaternionf();
+        this.scale = scale != null ? scale : new Vector3f(1, 1, 1);
+        this.tempRotation = new Quaternionf(this.rotation);
+        this.tempScale = new Vector3f(this.scale);
+    }
+
+    public Transform(Transform transform) {
+        this.translation = new Vector3f(transform.translation);
+        this.rotation = new Quaternionf(transform.rotation);
+        this.scale = new Vector3f(transform.scale);
+        this.tempRotation = new Quaternionf(this.rotation);
+        this.tempScale = new Vector3f(this.scale);
+    }
+
+    public Matrix4f getTransformationMatrix() {
+        return transformationMatrix.identity().translate(translation).rotate(rotation).scale
+                (scale);
+    }
+
+    public void rotate(Quaternionf rotation, float delta) {
+        tempRotation.mul(rotation);
+        this.rotation.slerp(tempRotation, delta);
+        tempRotation.set(this.rotation);
     }
 
     @Override
@@ -34,41 +60,41 @@ public class Transform {
         return "Transform{" +
                 "translation=" + translation +
                 ", rotation=" + rotation +
+                ", scale=" + scale +
                 '}';
     }
 
+    public void set(Transform transform) {
+        this.setTranslation(transform.translation);
+        this.setRotation(transform.rotation);
+        this.setScale(transform.scale);
+    }
 
+    public void setTranslation(Vector3f translation) {
+        this.translation = translation;
+    }
 
-    public void rotateAroundPoint(float dx, float dy, float dz, Transform transform){
-        this.translation.sub(transform.translation);
+    public void setRotation(Quaternionf rotation) {
+        this.rotation = rotation;
+    }
 
-        this.translation.rotateX(-(float)Math.toRadians(dx));
-        this.translation.rotateY(-(float)Math.toRadians(dy));
-        this.translation.rotateZ(-(float)Math.toRadians(dz));
-
-        this.translation.add(transform.translation);
-
-        this.rotation.add(dx,dy,dz);
+    public void setScale(Vector3f scale) {
+        this.scale = scale;
     }
 
 
-    public void updateToParent(GameObject parent) {
-        this.translation.add(parent.getWorldTransform().translation);
-        rotateAroundParent(parent.getWorldTransform());
-        this.scale.mul(parent.getWorldTransform().scale);
+    public void transform(Transform transform) {
+        this.rotation.set(tempRotation.set(transform.rotation).mul(this.rotation));
+        this.scale.mul(transform.scale);
+        this.translation.add(transform.translation).rotate(transform.rotation).mul(this.scale);
     }
 
-    private void rotateAroundParent(Transform transform){
-
-       this.translation.sub(transform.translation);
-
-        this.translation.rotateX(-transform.rotation.x);
-        this.translation.rotateY(-transform.rotation.y);
-        this.translation.rotateZ(-transform.rotation.z);
-
-        this.translation.add(transform.translation);
-
-
-        this.rotation.add(transform.rotation);
+    public Transform negate() {
+        this.translation.negate();
+        this.rotation.x = -this.rotation.x;
+        this.rotation.y = -this.rotation.y;
+        this.rotation.z = -this.rotation.z;
+        this.scale = new Vector3f(1).div(this.scale);
+        return this;
     }
 }

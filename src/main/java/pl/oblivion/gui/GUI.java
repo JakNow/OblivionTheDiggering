@@ -3,7 +3,7 @@ package pl.oblivion.gui;
 import pl.oblivion.material.Material;
 import pl.oblivion.scene.GameObject;
 
-public class GUI extends GameObject {
+public abstract class GUI extends GameObject {
 
     private Material material;
 
@@ -22,4 +22,7 @@ public class GUI extends GameObject {
     public void setMaterial(Material material) {
         this.material = material;
     }
+
+    public abstract void update(float delta);
+
 }

@@ -28,7 +28,12 @@ public class ParticlesCache {
         Particle particle = particleMap.get(name);
         if (particle == null) {
             //TODO fix later
-            particle = new Particle(name);
+            particle = new Particle(name) {
+                @Override
+                public void update(float delta) {
+
+                }
+            };
             particleMap.put(name, particle);
         }
         return particle;

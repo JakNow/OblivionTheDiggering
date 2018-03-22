@@ -1,28 +1,21 @@
 package pl.oblivion.shapes;
 
+import org.joml.Vector3f;
 import pl.oblivion.assets.AssetLoader;
+import pl.oblivion.assets.MeshCache;
+import pl.oblivion.assets.ShapeCache;
 import pl.oblivion.material.Material;
 import pl.oblivion.math.Transform;
 import pl.oblivion.scene.Mesh;
 import pl.oblivion.scene.Model;
 
-public class Cube extends Model {
+public abstract class Cube extends Model {
 
-    private static final Mesh mesh = AssetLoader.loadMesh("primitives/cube.obj");
+    public Cube(String name,float width, float height, float depth, Transform transform) {
+        super(name, transform, ShapeCache.getInstance().getCubeShape(name,width,height,depth), AssetLoader.loadMaterial
+                (AssetLoader
+                .DEFAULT_MATERIAL));
 
-    public Cube() {
-        super("Cube", mesh, AssetLoader.loadMaterial(AssetLoader.DEFAULT_MATERIAL));
     }
 
-    public Cube(Transform transform) {
-        super("Cube", transform, mesh, AssetLoader.loadMaterial(AssetLoader.DEFAULT_MATERIAL));
-    }
-
-    public Cube(String name, Transform transform) {
-        super(name, transform, mesh, AssetLoader.loadMaterial(AssetLoader.DEFAULT_MATERIAL));
-    }
-
-    public Cube(Transform transform, Material material) {
-        super("Cube", transform, mesh, material);
-    }
 }

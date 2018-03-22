@@ -13,8 +13,13 @@ public class PointLight extends Light {
     }
 
     public PointLight(Light light) {
-        super(light.getName(), light.getTransform(), light.getColor(), LightType.PointLight, light.getAttenuation(),
+        super(light.getName(), light.transform, light.getColor(), LightType.PointLight, light.getAttenuation(),
                 0, light
                         .getIntensity());
+    }
+
+    @Override
+    public void update(float delta) {
+
     }
 }

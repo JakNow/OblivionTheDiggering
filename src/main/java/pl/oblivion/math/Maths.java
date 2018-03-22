@@ -19,11 +19,6 @@ public class Maths {
      * Get from Camera class
      */
     private static final Matrix4f VIEW_MATRIX = new Matrix4f();
-    //Added to don't create new instance in everymethod. Use this and add more if needed
-    private static Vector3f TEMP_VEC1 = new Vector3f();
-    private static Vector3f TEMP_VEC2 = new Vector3f();
-    private static Vector3f TEMP_VEC3 = new Vector3f();
-
 
 
     public static void vector3fToList(Vector3f vector3f, List<Float> floatList) {
@@ -50,36 +45,30 @@ public class Maths {
         return array;
     }
 
-    private static Matrix4f viewCurrent = new Matrix4f();
 
     public static Matrix4f getModelViewMatrix(Model model) {
-       Quaternion rotation = model.getTransform().rotation;
-         MODEL_VIEW_MATRIX.identity().translate(model.getTransform().translation).rotateX(-rotation.x)
-                .rotateY(-rotation.y).rotateZ(-rotation.z).scale(model
-                .getTransform().scale);
-        viewCurrent.set(VIEW_MATRIX);
-        return viewCurrent.mul(MODEL_VIEW_MATRIX);
+        return MODEL_VIEW_MATRIX.set(VIEW_MATRIX).mul(model.transform.getTransformationMatrix());
     }
 
-    public static Matrix4f getViewMatrix(Camera camera) {
+    public static Matrix4f calculateViewMatrix(Camera camera) {
         VIEW_MATRIX.identity().set(camera.getViewMatrix());
         return VIEW_MATRIX;
     }
 
-    public static float clamp(float value, float min, float max){
-        if(value<min){
+    public static float clamp(float value, float min, float max) {
+        if (value < min) {
             return min;
-        }else if (value>max){
+        } else if (value > max) {
             return max;
-        }else{
+        } else {
             return value;
         }
     }
 
-    public static float keepValue(float value, float min, float max){
+    public static float keepValue(float value, float min, float max) {
         value = value % max;
-        if(value < min){
-            value+=max;
+        if (value < min) {
+            value += max;
         }
         return value;
     }

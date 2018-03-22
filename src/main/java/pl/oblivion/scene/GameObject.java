@@ -1,6 +1,9 @@
 package pl.oblivion.scene;
 
 import org.apache.log4j.Logger;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import pl.oblivion.collision.Collidable;
 import pl.oblivion.export.Saveable;
 import pl.oblivion.math.Transform;
@@ -14,13 +17,12 @@ public abstract class GameObject implements Cloneable, Saveable, Collidable {
     private final Class classType;
 
     protected String name;
-    protected Transform transform;
-    protected Transform worldTransform;
+    public Transform transform;
 
     private GameObject parent;
-    private List<GameObject> children = new ArrayList<>();
 
-    private boolean requiresUpdates = true;
+    public List<GameObject> children = new ArrayList<>();
+
 
     protected GameObject(String name, Class classType) {
         this.classType = classType;
@@ -36,7 +38,7 @@ public abstract class GameObject implements Cloneable, Saveable, Collidable {
         this.name = name;
     }
 
-    private GameObject getParent() {
+    public GameObject getParent() {
         return parent;
     }
 
@@ -49,22 +51,18 @@ public abstract class GameObject implements Cloneable, Saveable, Collidable {
             children = new LinkedList<>();
         }
         children.add(gameObject);
-        if (this.transform!=null && gameObject.transform != null) {
-            gameObject.transform.updateToParent(this);
-        }
+        gameObject.setParent(this);
+        gameObject.transform.transform(this.transform);
     }
 
-    public int detachChild(GameObject gameObject) {
-        if (gameObject.getParent() == this) {
-            int index = children.lastIndexOf(gameObject);
-            if (index != -1) {
-                children.remove(index);
-            }
-            return index;
-        }
-        return -1;
-    }
+    public void detachChild(GameObject gameObject) {
+        if(gameObject.getParent()==this){
+            children.remove(gameObject);
+            gameObject.transform.transform(this.transform.negate());
+            gameObject.setParent(null);
 
+        }
+    }
 
     public Class getClassType() {
         return classType;
@@ -74,11 +72,14 @@ public abstract class GameObject implements Cloneable, Saveable, Collidable {
         return children;
     }
 
-    public Transform getTransform(){
-        return transform;
-    }
+    public abstract void update(float delta);
 
-    public Transform getWorldTransform(){
-        return worldTransform;
+    public void updateTree(float delta){
+        if(this.getParent() !=null)
+        this.transform.transform(this.getParent().transform);
+        update(delta);
+        for(GameObject child : children){
+            child.updateTree(delta);
+        }
     }
 }

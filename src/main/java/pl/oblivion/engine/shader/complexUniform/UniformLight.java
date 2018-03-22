@@ -1,7 +1,9 @@
 package pl.oblivion.engine.shader.complexUniform;
 
 import org.apache.log4j.Logger;
+import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector4f;
 import pl.oblivion.engine.shader.uniforms.*;
 import pl.oblivion.light.Light;
@@ -10,7 +12,10 @@ import pl.oblivion.light.utils.Attenuation;
 public class UniformLight extends Uniform {
 
     private final Vector4f tempPos = new Vector4f();
-    private final Vector4f tempDir = new Vector4f();
+    private final Quaternionf tempDir = new Quaternionf();
+    private Matrix4f tempMatrix = new Matrix4f();
+    private AxisAngle4f tempAxisAngle = new AxisAngle4f();
+
     private UniformBoolean useDirectLight;
     private UniformBoolean usePointLight;
     private UniformBoolean useSpotLight;
@@ -49,7 +54,9 @@ public class UniformLight extends Uniform {
                 spotLight.loadLight(light, viewMatrix);
                 break;
         }
-    }    @Override
+    }
+
+    @Override
     public void storeUniformLocation(int programID) {
         useDirectLight.storeUniformLocation(programID);
         usePointLight.storeUniformLocation(programID);
@@ -77,22 +84,23 @@ public class UniformLight extends Uniform {
             attenuation = new UniformAttenuation(name + ".att");
             intensity = new UniformFloat(name + ".intensity");
         }
-
         private void loadLight(Light light, Matrix4f viewMatrix) {
-            tempPos.set(light.getTransform().translation, 1.0f);
+            tempPos.set(light.transform.translation, 1.0f);
             tempPos.mul(viewMatrix);
             position.loadVec3(tempPos.x, tempPos.y, tempPos.z);
 
-            tempDir.set(light.getTransform().rotation.x,light.getTransform().rotation.y,light.getTransform().rotation
-                    .z, 0.0f);
-            tempDir.mul(viewMatrix);
+            tempDir.set(light.transform.rotation);
+            tempDir.get(tempMatrix.identity()).mul(viewMatrix);
+            tempMatrix.getRotation(tempAxisAngle);
 
-            direction.loadVec3(tempDir.x, tempDir.y, tempDir.z);
+            direction.loadVec3(tempAxisAngle.x, tempAxisAngle.y, tempAxisAngle.z);
             color.loadVec4(light.getColor());
             angle.loadFloat(light.getAngle());
             attenuation.loadAttenuation(light.getAttenuation());
             intensity.loadFloat(light.getIntensity());
-        }        @Override
+        }
+
+        @Override
         protected Logger initLogger() {
             return Logger.getLogger(this.getClass().getName());
         }
@@ -124,13 +132,19 @@ public class UniformLight extends Uniform {
         }
 
         private void loadLight(Light light, Matrix4f viewMatrix) {
-            tempDir.set(light.getTransform().rotation.x,light.getTransform().rotation.y,light.getTransform().rotation
-                    .z, 0.0f);            tempDir.mul(viewMatrix);
 
-            direction.loadVec3(tempDir.x, tempDir.y, tempDir.z);
+
+            tempDir.set(light.transform.rotation);
+            tempDir.get(tempMatrix.identity()).mul(viewMatrix);
+            tempMatrix.getRotation(tempAxisAngle);
+
+            direction.loadVec3(tempAxisAngle.x, tempAxisAngle.y, tempAxisAngle.z);
+
             color.loadVec4(light.getColor());
             intensity.loadFloat(light.getIntensity());
-        }        @Override
+            }
+
+        @Override
         protected Logger initLogger() {
             return Logger.getLogger(this.getClass().getName());
         }
@@ -161,14 +175,15 @@ public class UniformLight extends Uniform {
         }
 
         private void loadLight(Light light, Matrix4f viewMatrix) {
-            tempPos.set(light.getTransform().translation, 1.0f);
+            tempPos.set(light.transform.translation, 1.0f);
             tempPos.mul(viewMatrix);
-
             position.loadVec3(tempPos.x, tempPos.y, tempPos.z);
             color.loadVec4(light.getColor());
             attenuation.loadAttenuation(light.getAttenuation());
             intensity.loadFloat(light.getIntensity());
-        }        @Override
+        }
+
+        @Override
         protected Logger initLogger() {
             return Logger.getLogger(this.getClass().getName());
         }

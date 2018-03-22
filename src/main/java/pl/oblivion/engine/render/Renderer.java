@@ -32,7 +32,12 @@ public class Renderer {
      */
     private final int[] bindingAttributes = {0, 1, 2};
     float t = 0.2f;
-    private final AmbientLight ambientLight = new AmbientLight(new Vector4f(t, t, t, 1.0f), 1.0f);
+    private final AmbientLight ambientLight = new AmbientLight(new Vector4f(t, t, t, 1.0f), 1.0f) {
+        @Override
+        public void update(float delta) {
+
+        }
+    };
     private Window window;
     private float currentWidth;
     private float currentHeight;
@@ -74,7 +79,7 @@ public class Renderer {
         for (ShaderType shaderType : rendererQueue.getShaderMeshMap().keySet()) {
             Map<MatMesh, List<Model>> mapOfModels = rendererQueue.getShaderMeshMap().get(shaderType);
             ShaderProgram shaderProgram = shaderCache.getShaderProgram(shaderType);
-            Matrix4f viewMatrix = Maths.getViewMatrix(camera);
+            Matrix4f viewMatrix = Maths.calculateViewMatrix(camera);
             shaderProgram.startShaderRenderLogic(this, viewMatrix);
             for (MatMesh matMesh : mapOfModels.keySet()) {
                 prepareMesh(matMesh, shaderProgram);
