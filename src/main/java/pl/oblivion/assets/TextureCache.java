@@ -29,7 +29,7 @@ class TextureCache {
     public Texture getTexture(String name, String path) {
         Texture texture = texturesMap.get(name);
         if (texture == null) {
-            texture = new Texture(name,path);
+            texture = new Texture(name, path);
             texturesMap.put(name, texture);
         }
         return texture;

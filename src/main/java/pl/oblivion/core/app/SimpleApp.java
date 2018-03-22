@@ -16,7 +16,7 @@ public abstract class SimpleApp {
 
     private static final Logger logger = Logger.getLogger(SimpleApp.class.getName());
     public static Properties prop = Config.loadProperties("src/main/resources/app.properties");
-
+    private static float interval;
     protected final Window window;
     protected final Camera camera;
     protected final Scene rootScene;
@@ -25,17 +25,20 @@ public abstract class SimpleApp {
     private final int ups = Integer.parseInt(prop.getProperty("window.display.ups"));
     private final int fps = Integer.parseInt(prop.getProperty("window.display.fps"));
 
-    private static float interval;
     protected SimpleApp() {
         window = new Window();
         timer = new Timer();
-        camera = new Camera("3d camera",new Vector3f(0,0,0),new Quaternionf(new AxisAngle4f((float)Math.toRadians
-                (0),0,1,0)),
+        camera = new Camera("3d camera", new Vector3f(0, 0, 0), new Quaternionf(new AxisAngle4f((float) Math.toRadians
+                (0), 0, 1, 0)),
                 window);
         renderer = new Renderer(window, camera);
         rootScene = new Scene("rootNode", new Transform());
 
 
+    }
+
+    public static float getInterval() {
+        return interval;
     }
 
     public void run() {
@@ -56,7 +59,7 @@ public abstract class SimpleApp {
 
                 accumulator -= interval;
                 upsTick++;
-                }
+            }
             renderer.render();
             fpsTick++;
             if (!window.isvSync()) {
@@ -99,9 +102,6 @@ public abstract class SimpleApp {
         renderer.cleanUp();
     }
 
-    public static float getInterval(){
-        return interval;
-    }
     private class Timer {
         private final Logger logger = Logger.getLogger(Timer.class);
         private double lastLoopTime;

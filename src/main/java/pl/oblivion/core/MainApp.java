@@ -15,7 +15,6 @@ import pl.oblivion.light.utils.Attenuation;
 import pl.oblivion.material.Material;
 import pl.oblivion.material.Texture;
 import pl.oblivion.math.Transform;
-import pl.oblivion.scene.Mesh;
 import pl.oblivion.scene.Model;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
@@ -29,23 +28,22 @@ public class MainApp extends SimpleApp {
     public MainApp() {
         cube1 = new Floor(10, 10, new Transform(new Vector3f(0, -5, 0), new Quaternionf(),
                 new
-                Vector3f(1, 1, 1)));
-        cube2 = new Wall( 11, 5, 1, new Transform(new Vector3f(0, 2.5f, 5f), new Quaternionf(),
+                        Vector3f(1, 1, 1)));
+        cube2 = new Wall(11, 5, 1, new Transform(new Vector3f(0, 2.5f, 5f), new Quaternionf(),
                 new
-                Vector3f
-                (1, 1, 1)));
+                        Vector3f
+                        (1, 1, 1)));
 
-        cube3 = new Wall( 11, 5, 1, new Transform(new Vector3f(0, 2.5f, -5f), new Quaternionf(),
+        cube3 = new Wall(11, 5, 1, new Transform(new Vector3f(0, 2.5f, -5f), new Quaternionf(),
                 new Vector3f(1, 1, 1)));
 
-        cube4 = new Wall( 11, 5, 1, new Transform(new Vector3f(5, 2.5f, 0),new Quaternionf(new AxisAngle4f
-                ((float) Math.toRadians(90),0,1,0)), new
+        cube4 = new Wall(11, 5, 1, new Transform(new Vector3f(5, 2.5f, 0), new Quaternionf(new AxisAngle4f
+                ((float) Math.toRadians(90), 0, 1, 0)), new
                 Vector3f(1, 1, 1)));
 
-        cube5 = new Wall( 11, 5, 1, new Transform(new Vector3f(-5f, 2.5f, 0), new Quaternionf(new AxisAngle4f
-                ((float) Math.toRadians(90),0,1,0)), new
+        cube5 = new Wall(11, 5, 1, new Transform(new Vector3f(-5f, 2.5f, 0), new Quaternionf(new AxisAngle4f
+                ((float) Math.toRadians(90), 0, 1, 0)), new
                 Vector3f(1, 1, 1)));
-
 
 
         Material testMaterial = cube1.getMatMesh().getMaterial();
@@ -79,15 +77,14 @@ public class MainApp extends SimpleApp {
         cube1.addChild(cube5);
 
 
-
         Vector4f color = new Vector4f(1, 1, 1, 1);
-        Quaternionf direction = new Quaternionf(new AxisAngle4f((float)Math.toRadians(45),0,-1,0));
+        Quaternionf direction = new Quaternionf(new AxisAngle4f((float) Math.toRadians(45), 0, -1, 0));
 
 
         pointLight = new PointLight("pointLight", new Vector3f(0, 2, 7), color, new
                 Attenuation(1, 0.01f, 0.02f), 1.0f);
         cube1.addChild(pointLight);
-       DirectLight directLight = new DirectLight("directLight", direction, color, 1.0f) {
+        DirectLight directLight = new DirectLight("directLight", direction, color, 1.0f) {
             @Override
             public void update(float delta) {
 
@@ -103,9 +100,8 @@ public class MainApp extends SimpleApp {
         cube1.addChild(spotLight);
 
 
-
-        DirectLight directLight1 = new DirectLight("test", new Quaternionf(new AxisAngle4f((float)Math.toRadians(90),
-                1,1,0)), new Vector4f
+        DirectLight directLight1 = new DirectLight("test", new Quaternionf(new AxisAngle4f((float) Math.toRadians(90),
+                1, 1, 0)), new Vector4f
                 (0.34f, 0.231f, 0.852f,
                         1.0f), 0.5f) {
             @Override
@@ -116,8 +112,8 @@ public class MainApp extends SimpleApp {
         rootScene.addChild(directLight1);
 
 
-        DirectLight directLight2 = new DirectLight("test", new Quaternionf(new AxisAngle4f((float)Math.toRadians(90),
-                1,1,0)), new
+        DirectLight directLight2 = new DirectLight("test", new Quaternionf(new AxisAngle4f((float) Math.toRadians(90),
+                1, 1, 0)), new
                 Vector4f
                 (0.1734f, 0.1734f,
                         0.1734f,
@@ -128,8 +124,6 @@ public class MainApp extends SimpleApp {
             }
         };
         rootScene.addChild(directLight2);
-
-
 
 
         rootScene.addChild(camera);
@@ -143,7 +137,7 @@ public class MainApp extends SimpleApp {
     @Override
     public void logicUpdate(float delta) {
 
-        cube1.rotate(new Quaternionf(new AxisAngle4f((float)Math.toRadians(5),0,1,0)),delta);
+        cube1.rotate(new Quaternionf(new AxisAngle4f((float) Math.toRadians(5), 0, 1, 0)), delta);
 
         rootScene.updateTree(delta);
         if (window.isKeyPressed(GLFW_KEY_ESCAPE)) {

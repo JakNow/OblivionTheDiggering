@@ -9,7 +9,7 @@ import pl.oblivion.math.Transform;
 public class PointLight extends Light {
 
     public PointLight(String name, Vector3f position, Vector4f colour, Attenuation attenuation, float intensity) {
-        super(name, new Transform(position,null,null), colour, LightType.PointLight, attenuation, 0, intensity);
+        super(name, new Transform(position, null, null), colour, LightType.PointLight, attenuation, 0, intensity);
     }
 
     public PointLight(Light light) {

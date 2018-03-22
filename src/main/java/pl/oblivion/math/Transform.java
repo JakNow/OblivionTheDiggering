@@ -3,7 +3,6 @@ package pl.oblivion.math;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 /**
  * @author jakubnowakowski
@@ -11,11 +10,10 @@ import org.joml.Vector4f;
  */
 public class Transform {
 
+    private final Matrix4f transformationMatrix = new Matrix4f();
     public Vector3f translation;
     public Quaternionf rotation;
     public Vector3f scale;
-
-    private final Matrix4f transformationMatrix = new Matrix4f();
     private Quaternionf tempRotation;
     private Vector3f tempScale;
 

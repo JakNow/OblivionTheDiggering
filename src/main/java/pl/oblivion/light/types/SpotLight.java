@@ -10,18 +10,18 @@ import pl.oblivion.math.Transform;
 public class SpotLight extends Light {
 
 
+    public SpotLight(SpotLight spotLight) {
+        this(spotLight.getName(), spotLight.transform.translation, spotLight.transform.rotation,
+                spotLight
+                        .getColor
+                                (), spotLight
+                        .getAngle(), spotLight.getAttenuation(), spotLight.getIntensity());
+    }
+
     public SpotLight(String name, Vector3f position, Quaternionf direction, Vector4f color, float angle, Attenuation
             attenuation,
                      float intensity) {
-        super(name, new Transform(position,direction,null), color, LightType.SpotLight, attenuation, angle, intensity);
-    }
-
-    public SpotLight(SpotLight spotLight) {
-        this(spotLight.getName(), spotLight.transform.translation,spotLight.transform.rotation,
-                spotLight
-                .getColor
-                (), spotLight
-                .getAngle(), spotLight.getAttenuation(), spotLight.getIntensity());
+        super(name, new Transform(position, direction, null), color, LightType.SpotLight, attenuation, angle, intensity);
     }
 
     @Override

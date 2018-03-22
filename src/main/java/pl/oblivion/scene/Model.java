@@ -6,7 +6,7 @@ import pl.oblivion.assets.AssetLoader;
 import pl.oblivion.material.Material;
 import pl.oblivion.math.Transform;
 
-public class Model extends GameObject implements Moveable{
+public class Model extends GameObject implements Moveable {
 
     private static final Logger logger = Logger.getLogger(Model.class.getName());
     private MatMesh matMesh;
@@ -54,16 +54,16 @@ public class Model extends GameObject implements Moveable{
 
     @Override
     public void rotate(Quaternionf rotation, float delta) {
-       this.transform.rotate(rotation,delta);
-    }
-
-    public void increaseRotation(float dt){
-        //this.transform.rotation.rotateY((float)Math.toRadians(dt));
+        this.transform.rotate(rotation, delta);
     }
 
     @Override
     public void translate(float dx, float dy, float dz, float delta) {
 
+    }
+
+    public void increaseRotation(float dt) {
+        //this.transform.rotation.rotateY((float)Math.toRadians(dt));
     }
 
     public void update(float delta) {

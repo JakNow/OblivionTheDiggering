@@ -21,31 +21,31 @@ public class Utils {
         ByteBuffer buffer;
         URL url = Thread.currentThread().getContextClassLoader().getResource(resoruce);
         File file = new File(url.getFile());
-        if(file.isFile()){
+        if (file.isFile()) {
             FileInputStream inputStream = new FileInputStream(file);
             FileChannel channel = inputStream.getChannel();
-            buffer = channel.map(FileChannel.MapMode.READ_ONLY,0,channel.size());
+            buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
             channel.close();
             inputStream.close();
-        }else{
+        } else {
             buffer = BufferUtils.createByteBuffer(bufferSize);
             InputStream inputStream = url.openStream();
-            if(inputStream == null){
-                logger.error("Couldn't find the file at path: "+resoruce+"\n", new FileNotFoundException());
+            if (inputStream == null) {
+                logger.error("Couldn't find the file at path: " + resoruce + "\n", new FileNotFoundException());
             }
-            try{
+            try {
                 ReadableByteChannel readableByteChannel = Channels.newChannel(inputStream);
-                try{
-                    while(true){
+                try {
+                    while (true) {
                         int bytes = readableByteChannel.read(buffer);
-                        if(bytes == -1){
+                        if (bytes == -1) {
                             break;
                         }
-                        if(buffer.remaining() ==0){
-                            buffer = resizeBuffer(buffer, buffer.capacity() *2);
+                        if (buffer.remaining() == 0) {
+                            buffer = resizeBuffer(buffer, buffer.capacity() * 2);
                         }
                     }
-                        buffer.flip();
+                    buffer.flip();
                 } finally {
                     readableByteChannel.close();
                 }
@@ -53,10 +53,10 @@ public class Utils {
                 inputStream.close();
             }
         }
-    return buffer;
+        return buffer;
     }
 
-    private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity){
+    private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
         ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
         buffer.flip();
         newBuffer.put(buffer);

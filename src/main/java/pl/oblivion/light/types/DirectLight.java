@@ -13,6 +13,6 @@ public abstract class DirectLight extends Light {
     }
 
     public DirectLight(String name, Quaternionf direction, Vector4f colour, float intensity) {
-        super(name, new Transform(null,direction,null), colour, LightType.DirectLight, null, 0, intensity);
+        super(name, new Transform(null, direction, null), colour, LightType.DirectLight, null, 0, intensity);
     }
 }

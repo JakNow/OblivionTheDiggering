@@ -23,8 +23,8 @@ public class Camera extends GameObject {
 
 
     public Matrix4f getViewMatrix() {
-        return viewMatrix.identity().rotate(transform.rotation).translate(-transform.translation.x,-transform
-                .translation.y,-transform.translation.z);
+        return viewMatrix.identity().rotate(transform.rotation).translate(-transform.translation.x, -transform
+                .translation.y, -transform.translation.z);
     }
 
 
@@ -48,14 +48,13 @@ public class Camera extends GameObject {
             transform.translation.y += 0.5 * 100 * delta;
         }
         if (window.isKeyPressed(GLFW_KEY_Q)) {
-            transform.rotation.rotateX((float)Math.toRadians(20*delta));
+            transform.rotation.rotateX((float) Math.toRadians(20 * delta));
         }
 
         if (window.isKeyPressed(GLFW_KEY_E)) {
-            transform.rotation.rotateX((float)Math.toRadians(-20*delta));
+            transform.rotation.rotateX((float) Math.toRadians(-20 * delta));
         }
     }
-
 
 
 }

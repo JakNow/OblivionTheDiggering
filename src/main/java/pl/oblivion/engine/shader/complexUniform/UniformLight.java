@@ -56,16 +56,6 @@ public class UniformLight extends Uniform {
         }
     }
 
-    @Override
-    public void storeUniformLocation(int programID) {
-        useDirectLight.storeUniformLocation(programID);
-        usePointLight.storeUniformLocation(programID);
-        useSpotLight.storeUniformLocation(programID);
-        directLight.storeUniformLocation(programID);
-        pointLight.storeUniformLocation(programID);
-        spotLight.storeUniformLocation(programID);
-    }
-
     public class UniformSpotLight extends Uniform {
 
         private UniformVec3 position;
@@ -84,6 +74,7 @@ public class UniformLight extends Uniform {
             attenuation = new UniformAttenuation(name + ".att");
             intensity = new UniformFloat(name + ".intensity");
         }
+
         private void loadLight(Light light, Matrix4f viewMatrix) {
             tempPos.set(light.transform.translation, 1.0f);
             tempPos.mul(viewMatrix);
@@ -116,6 +107,14 @@ public class UniformLight extends Uniform {
         }
 
 
+    }    @Override
+    public void storeUniformLocation(int programID) {
+        useDirectLight.storeUniformLocation(programID);
+        usePointLight.storeUniformLocation(programID);
+        useSpotLight.storeUniformLocation(programID);
+        directLight.storeUniformLocation(programID);
+        pointLight.storeUniformLocation(programID);
+        spotLight.storeUniformLocation(programID);
     }
 
     public class UniformDirectLight extends Uniform {
@@ -142,7 +141,7 @@ public class UniformLight extends Uniform {
 
             color.loadVec4(light.getColor());
             intensity.loadFloat(light.getIntensity());
-            }
+        }
 
         @Override
         protected Logger initLogger() {
@@ -230,6 +229,8 @@ public class UniformLight extends Uniform {
             return Logger.getLogger(this.getClass().getName());
         }
     }
+
+
 
 
 }

@@ -1,7 +1,6 @@
 package pl.oblivion.math;
 
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import pl.oblivion.engine.camera.Camera;
 import pl.oblivion.scene.Model;

@@ -14,7 +14,7 @@ public class Material implements Cloneable, Saveable {
     public static final int SPECULAR_TEXTURE_UNIT = 3;
     public static final int ALPHA_TEXTURE_UNIT = 4;
     public static final int REFLECTION_TEXTURE_UNIT = 5;
-    
+
     public static final Vector4f DEFAULT_COLOR = new Vector4f(255, 255, 255, 1);
     private static final Logger logger = Logger.getLogger(Material.class.getName());
     private String name;
@@ -40,12 +40,12 @@ public class Material implements Cloneable, Saveable {
         return shader;
     }
 
-    public void setShader(ShaderProgram shader) {
-        this.shader = shader;
-    }
-
     public void setShader(ShaderType shaderType) {
         this.shader = ShaderCache.getInstance().getShaderProgram(shaderType);
+    }
+
+    public void setShader(ShaderProgram shader) {
+        this.shader = shader;
     }
 
     public String getName() {
@@ -188,15 +188,14 @@ public class Material implements Cloneable, Saveable {
         return useAlphaTexture;
     }
 
+    public Texture getReflectionTexture() {
+        return (Texture) this.getMaterialParam(MaterialDataType.ReflectionTexture);
+    }
+
     public void setReflectionTexture(Texture texture) {
         this.useReflectionTexture = true;
         this.setMaterialParam(MaterialDataType.ReflectionTexture, texture);
     }
-    
-    public Texture getReflectionTexture(){
-        return (Texture) this.getMaterialParam(MaterialDataType.ReflectionTexture);
-    }
-
 
     public boolean isUseReflectionTexture() {
         return useReflectionTexture;

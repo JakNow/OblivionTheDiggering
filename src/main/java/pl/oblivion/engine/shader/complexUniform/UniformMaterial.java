@@ -33,7 +33,7 @@ public class UniformMaterial extends Uniform {
         hasAmbientTexture = new UniformBoolean(name + ".hasAmbientTexture");
         hasSpecularTexture = new UniformBoolean(name + ".hasSpecularTexture");
         hasAlphaTexture = new UniformBoolean(name + ".hasAlphaTexture");
-        hasReflectionTexture = new UniformBoolean(name+".hasReflectionTexture");
+        hasReflectionTexture = new UniformBoolean(name + ".hasReflectionTexture");
 
         ambientColor = new UniformVec4(name + ".ambientColor");
         diffuseColor = new UniformVec4(name + ".diffuseColor");

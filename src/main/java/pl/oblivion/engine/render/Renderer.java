@@ -125,7 +125,7 @@ public class Renderer {
         if (material.isUseAlphaTexture()) {
             matMesh.getMaterial().getAlphaTexture().bind(Material.ALPHA_TEXTURE_UNIT);
         }
-        if(material.isUseReflectionTexture()){
+        if (material.isUseReflectionTexture()) {
             matMesh.getMaterial().getReflectionTexture().bind(Material.REFLECTION_TEXTURE_UNIT);
         }
 
